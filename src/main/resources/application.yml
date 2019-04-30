@@ -1,0 +1,48 @@
+###################  srping配置  ###################
+spring:
+  thymeleaf:      # thymeleaf
+    prefix: classpath:/templates/   # 前缀
+    suffix: .html                   # 后缀
+    cache: false                    # 开发时关闭缓存，生产环境需要开启
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+  datasource:     # driud
+      url: jdbc:mysql://127.0.0.1:3306/miaosha?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password:
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      filters: stat   # 用于统计监控信息
+      maxActive: 2    # 最大活动连接
+      initialSize: 1  # 初始大小
+      maxWait: 60000    # 最大等待时间
+      minIdle: 1        # 最小空闲连接
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+
+###################  mybatis配置  ###################
+mybatis:
+  type-aliases-package: com.glw.miaosha.domain
+  configuration:
+    map-underscore-to-camel-case: true  # 下划线转换成驼峰
+    default-fetch-size: 100
+    default-statement-timeout: 3000
+  mapper-locations: classpath:com/glw/miaosha/dao/*.xml
+
+###################  redis配置  ###################
+redis:
+  host: 127.0.0.1
+  port: 6379
+  timeout: 3
+  password:
+  poolMaxActive: 10
+  poolMaxIdle: 10
+  poolMaxWait: 3
