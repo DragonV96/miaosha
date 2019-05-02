@@ -1,6 +1,8 @@
 package com.glw.miaosha.controller;
 
 import com.glw.miaosha.doman.User;
+import com.glw.miaosha.redis.RedisService;
+import com.glw.miaosha.redis.UserKey;
 import com.glw.miaosha.result.CodeMsg;
 import com.glw.miaosha.result.Result;
 import com.glw.miaosha.service.UserService;
@@ -20,6 +22,9 @@ public class SampleController {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public RedisService redisService;
 
     @RequestMapping("/thymeleaf")
     public String thymeleaf(Model model) {
@@ -48,6 +53,23 @@ public class SampleController {
     @ResponseBody
     public Result<Boolean> dbTs() {
         userService.ts();
+        return Result.success(true);
+    }
+
+    @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<User> redisGet() {
+        User user = redisService.get(UserKey.getById, "" + 1, User.class);
+        return Result.success(user);
+    }
+
+    @RequestMapping("/redis/set")
+    @ResponseBody
+    public Result<Boolean> redisSet() {
+        User user = new User();
+        user.setId(1);
+        user.setName("glw");
+        redisService.set(UserKey.getById, "" + 1, user);
         return Result.success(true);
     }
 }

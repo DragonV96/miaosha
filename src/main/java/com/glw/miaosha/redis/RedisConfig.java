@@ -14,7 +14,7 @@ public class RedisConfig {
     private int port;
     private int timeout;
     private String password;
-    private int poolMaxActive;
+    private int poolMaxTotal;
     private int poolMaxIdle;
     private int poolMaxWait;
 
@@ -50,12 +50,12 @@ public class RedisConfig {
         this.password = password;
     }
 
-    public int getPoolMaxActive() {
-        return poolMaxActive;
+    public int getPoolMaxTotal() {
+        return poolMaxTotal;
     }
 
-    public void setPoolMaxActive(int poolMaxActive) {
-        this.poolMaxActive = poolMaxActive;
+    public void setPoolMaxTotal(int poolMaxTotal) {
+        this.poolMaxTotal = poolMaxTotal;
     }
 
     public int getPoolMaxIdle() {
