@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
+import javax.validation.Valid;
+
 /**
  * @author glw
  * @date 2019/5/8 9:15
@@ -38,26 +40,10 @@ public class LoginController {
 
     @RequestMapping("/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(LoginVo loginVo) {
+    public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
         logger.info(loginVo.toString());
-        // 参数校验
-        String passInput = loginVo.getPassword();
-        String mobile = loginVo.getMobile();
-        if (StringUtils.isEmpty(passInput)) {
-            return Result.error(CodeMsg.PASSWORD_EMPTY);
-        }
-        if (StringUtils.isEmpty(mobile)) {
-            return Result.error(CodeMsg.MOBILE_EMPTY);
-        }
-        if (!ValidatorUtil.isMobile(mobile)) {
-            return Result.error(CodeMsg.MOBILE_ERROR);
-        }
         // 登录
-        CodeMsg codeMsg = msUserService.login(loginVo);
-        if (codeMsg.getCode() == 0) {
-            return Result.success(true);
-        } else {
-            return Result.error(codeMsg);
-        }
+        msUserService.login(loginVo);
+        return Result.success(true);
     }
 }
