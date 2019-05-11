@@ -3,11 +3,18 @@ package com.glw.miaosha.service;
 import com.glw.miaosha.dao.MsUserDao;
 import com.glw.miaosha.doman.MsUser;
 import com.glw.miaosha.exception.GlobalException;
+import com.glw.miaosha.redis.MsUserKey;
+import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.result.CodeMsg;
 import com.glw.miaosha.util.MD5Util;
+import com.glw.miaosha.util.UUIDUtil;
 import com.glw.miaosha.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author glw
@@ -16,14 +23,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class MsUserService {
 
+    public static final String COOKIE_NAME_TOKEN = "token";
+
     @Autowired
     public MsUserDao msUserDao;
+
+    @Autowired
+    public RedisService redisService;
 
     public MsUser getById (long id) {
         return msUserDao.getById(id);
     }
 
-    public boolean login(LoginVo loginVo) {
+    public MsUser getByToken (String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        return redisService.get(MsUserKey.token, token, MsUser.class);
+    }
+
+    public boolean login(HttpServletResponse response, LoginVo loginVo) {
         if (loginVo == null) {
             throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -41,6 +60,13 @@ public class MsUserService {
         if (!clacPass.equals(dbPass)) {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
+        // 生成cookie
+        String token = UUIDUtil.uuid();
+        redisService.set(MsUserKey.token, token, msUser);
+        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
+        cookie.setMaxAge(MsUserKey.token.expireSeconds());      // 设置cookie有效期
+        cookie.setPath("/");      // 设置网站根目录
+        response.addCookie(cookie);
         return true;
     }
 }
