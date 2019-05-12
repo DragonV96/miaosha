@@ -42,7 +42,7 @@ public class MsUserService {
         MsUser msUser = redisService.get(MsUserKey.token, token, MsUser.class);
         // 延长token有效期
         if (msUser != null) {
-            addCookie(response, msUser);
+            addCookie(response, token, msUser);
         }
         return msUser;
     }
@@ -67,12 +67,12 @@ public class MsUserService {
         }
 
         // 生成cookie
-        addCookie(response, msUser);
+        String token = UUIDUtil.uuid();
+        addCookie(response, token, msUser);
         return true;
     }
 
-    private void addCookie(HttpServletResponse response, MsUser msUser) {
-        String token = UUIDUtil.uuid();
+    private void addCookie(HttpServletResponse response,String token , MsUser msUser) {
         redisService.set(MsUserKey.token, token, msUser);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(MsUserKey.token.expireSeconds());      // 设置cookie有效期
