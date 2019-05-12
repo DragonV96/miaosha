@@ -35,11 +35,16 @@ public class MsUserService {
         return msUserDao.getById(id);
     }
 
-    public MsUser getByToken (String token) {
+    public MsUser getByToken (HttpServletResponse response, String token) {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        return redisService.get(MsUserKey.token, token, MsUser.class);
+        MsUser msUser = redisService.get(MsUserKey.token, token, MsUser.class);
+        // 延长token有效期
+        if (msUser != null) {
+            addCookie(response, msUser);
+        }
+        return msUser;
     }
 
     public boolean login(HttpServletResponse response, LoginVo loginVo) {
@@ -60,13 +65,18 @@ public class MsUserService {
         if (!clacPass.equals(dbPass)) {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
+
         // 生成cookie
+        addCookie(response, msUser);
+        return true;
+    }
+
+    private void addCookie(HttpServletResponse response, MsUser msUser) {
         String token = UUIDUtil.uuid();
         redisService.set(MsUserKey.token, token, msUser);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(MsUserKey.token.expireSeconds());      // 设置cookie有效期
         cookie.setPath("/");      // 设置网站根目录
         response.addCookie(cookie);
-        return true;
     }
 }
