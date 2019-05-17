@@ -1,6 +1,5 @@
 package com.glw.miaosha.doman;
 
-import java.math.BigDecimal;
 
 public class Goods {
     private Long id;
@@ -11,7 +10,7 @@ public class Goods {
 
     private String goodsImg;
 
-    private BigDecimal goodsPrice;
+    private Long goodsPrice;
 
     private Integer goodsStock;
 
@@ -49,11 +48,11 @@ public class Goods {
         this.goodsImg = goodsImg == null ? null : goodsImg.trim();
     }
 
-    public BigDecimal getGoodsPrice() {
+    public Long getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(BigDecimal goodsPrice) {
+    public void setGoodsPrice(Long goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
