@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 /**
  * Create by glw
@@ -52,13 +51,13 @@ public class MiaoshaController {
         Integer stockCount = goods.getStockCount();
         if (stockCount <= 0) {
             model.addAttribute("errmsg", CodeMsg.MIAO_SHA_OVER.getMsg());
-            return "miaosha_failed";
+            return "miaosha_fail";
         }
         // 判断是否已经秒杀到
         MsOrder msOrder = orderService.getMsOrderByUserIdGoodsId(user.getId(), goodsId);
         if (msOrder != null) {
             model.addAttribute("errmsg", CodeMsg.REPEATE_MIAO_SHA.getMsg());
-            return "miaosha_failed";
+            return "miaosha_fail";
         }
         // 减库存->下订单->写入秒杀订单
         OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
