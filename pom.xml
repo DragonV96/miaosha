@@ -7,7 +7,7 @@
   <groupId>com.glw</groupId>
   <artifactId>miaosha</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <name>miaosha</name>
   <!-- FIXME change it to the project's website -->
@@ -28,11 +28,11 @@
   <dependencies>
 
     <!-- provided-编译时依赖 -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.springframework.boot</groupId>-->
+      <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+      <!--<scope>provided</scope>-->
+    <!--</dependency>-->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -99,12 +99,19 @@
   <build>
     <finalName>${project.artifactId}</finalName>
       <plugins>
+        <!-- 打war包插件 -->
+        <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-war-plugin</artifactId>-->
+          <!--<configuration>-->
+            <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
+          <!--</configuration>-->
+        <!--</plugin>-->
+
+        <!-- 打jar包插件 -->
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-war-plugin</artifactId>
-          <configuration>
-            <failOnMissingWebXml>false</failOnMissingWebXml>
-          </configuration>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
         </plugin>
       </plugins>
   </build>
