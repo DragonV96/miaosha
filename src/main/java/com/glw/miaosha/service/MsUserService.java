@@ -32,7 +32,35 @@ public class MsUserService {
     public RedisService redisService;
 
     public MsUser getById (long id) {
-        return msUserDao.getById(id);
+        // 取缓存
+        MsUser user = redisService.get(MsUserKey.getById, "" + id, MsUser.class);
+        if (user != null) {
+            return user;
+        }
+        // 取数据库
+        user = msUserDao.getById(id);
+        if (user != null) {
+            redisService.set(MsUserKey.getById, "" + id, user);
+        }
+        return user;
+    }
+
+    public boolean updatePassword(String token, long id, String passwordNew) {
+        // 取user
+        MsUser user = getById(id);
+        if (user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        // 更新数据库
+        MsUser toBeUpdate = new MsUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(passwordNew, user.getSalt()));
+        msUserDao.update(toBeUpdate);
+        // 处理缓存
+        redisService.delete(MsUserKey.getById, "" + id);
+        user.setPassword(toBeUpdate.getPassword());
+        redisService.set(MsUserKey.token, token, user);
+        return true;
     }
 
     public MsUser getByToken (HttpServletResponse response, String token) {

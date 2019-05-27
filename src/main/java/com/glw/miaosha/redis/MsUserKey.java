@@ -13,5 +13,6 @@ public class MsUserKey extends BasePrefix{
     }
 
     public static MsUserKey token = new MsUserKey(TOKEN_EXPIRE, "tk");
+    public static MsUserKey getById = new MsUserKey(0, "id");   // 永久有效
 
 }
