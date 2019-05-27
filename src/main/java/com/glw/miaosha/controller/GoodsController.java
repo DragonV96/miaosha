@@ -3,9 +3,10 @@ package com.glw.miaosha.controller;
 import com.glw.miaosha.doman.MsUser;
 import com.glw.miaosha.redis.GoodsKey;
 import com.glw.miaosha.redis.RedisService;
+import com.glw.miaosha.result.Result;
 import com.glw.miaosha.service.GoodsService;
 import com.glw.miaosha.service.MsUserService;
-import com.glw.miaosha.service.UserService;
+import com.glw.miaosha.vo.GoodsDetailVo;
 import com.glw.miaosha.vo.GoodsVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class GoodsController {
         model.addAttribute("goodsList", goodsList);
         // 手动渲染
         SpringWebContext ctx = new SpringWebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap(), applicationContext);
+        // 手动渲染
         html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
         if (!StringUtils.isEmpty(html)) {
             redisService.set(GoodsKey.getGoodsList, "", html);
@@ -64,9 +66,9 @@ public class GoodsController {
         return html;
     }
 
-    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
+    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
     @ResponseBody
-    public String detail(HttpServletRequest request, HttpServletResponse response,
+    public String detail2(HttpServletRequest request, HttpServletResponse response,
                          Model model,MsUser user, @PathVariable("goodsId")long goodsId) {
         model.addAttribute("user", user);
 
@@ -109,4 +111,34 @@ public class GoodsController {
         return html;
     }
 
+    @RequestMapping("/detail/{goodsId}")
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response,
+                                        Model model, MsUser user, @PathVariable("goodsId")long goodsId) {
+        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+
+        long startAt = goods.getStartDate().getTime();
+        long endAt = goods.getEndDate().getTime();
+        long now = System.currentTimeMillis();
+
+        int msStatus = 0;       // 秒杀状态：0-未开始，1-进行中，2-已结束
+        int remainSeconds = 0;  // 秒杀倒计时时间（s）
+
+        if (now < startAt) {    // 秒杀还没开始，倒计时
+            msStatus = 0;
+            remainSeconds = (int)(startAt - now)/1000;
+        } else if (now > endAt) {  // 秒杀已经结束
+            msStatus = 2;
+            remainSeconds = -1;
+        } else {    // 秒杀进行中
+            msStatus = 1;
+            remainSeconds = 0;
+        }
+        GoodsDetailVo vo = new GoodsDetailVo();
+        vo.setGoods(goods);
+        vo.setUser(user);
+        vo.setMsStatus(msStatus);
+        vo.setRemainSeconds(remainSeconds);
+        return Result.success(vo);
+    }
 }
