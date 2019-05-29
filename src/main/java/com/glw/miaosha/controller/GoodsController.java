@@ -111,7 +111,7 @@ public class GoodsController {
         return html;
     }
 
-    @RequestMapping("/detail/{goodsId}")
+    @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
     public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response,
                                         Model model, MsUser user, @PathVariable("goodsId")long goodsId) {

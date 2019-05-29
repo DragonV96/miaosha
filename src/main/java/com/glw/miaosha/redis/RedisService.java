@@ -97,7 +97,7 @@ public class RedisService {
         try {
             jedis = jedisPool.getResource();
             String realKey = keyPrefix.getPrefix() + key;
-            long result = jedis.del(realKey);
+            long result = jedis.del(key);
             return result > 0;
         } finally {
             returnToPool(jedis);
