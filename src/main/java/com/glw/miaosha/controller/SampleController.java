@@ -1,6 +1,7 @@
 package com.glw.miaosha.controller;
 
 import com.glw.miaosha.doman.User;
+import com.glw.miaosha.rabbitmq.MQSender;
 import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.redis.UserKey;
 import com.glw.miaosha.result.CodeMsg;
@@ -25,6 +26,16 @@ public class SampleController {
 
     @Autowired
     public RedisService redisService;
+
+    @Autowired
+    MQSender sender;
+
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq() {
+        sender.send("rabbitMQ");
+        return Result.success("Hello World++++");
+    }
 
     @RequestMapping("/thymeleaf")
     public String thymeleaf(Model model) {

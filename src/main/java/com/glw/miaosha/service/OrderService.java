@@ -4,6 +4,8 @@ import com.glw.miaosha.dao.OrderDao;
 import com.glw.miaosha.doman.MsOrder;
 import com.glw.miaosha.doman.MsUser;
 import com.glw.miaosha.doman.OrderInfo;
+import com.glw.miaosha.redis.OrderKey;
+import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,12 @@ public class OrderService {
     @Autowired
     OrderDao orderDao;
 
+    @Autowired
+    RedisService redisService;
+
     public MsOrder getMsOrderByUserIdGoodsId(long userId, long goodsId){
-        return orderDao.getMsOrderByUserIdGoodsId(userId, goodsId);
+//        return orderDao.getMsOrderByUserIdGoodsId(userId, goodsId);
+        return redisService.get(OrderKey.getMsOrderByUidGid, "" + userId + "_" + goodsId, MsOrder.class);
     }
 
     public OrderInfo getOrderById(long orderId) {
@@ -48,6 +54,8 @@ public class OrderService {
         msOrder.setOrderId(orderId);
         msOrder.setUserId(user.getId());
         orderDao.insertMsOrder(msOrder);
+
+        redisService.set(OrderKey.getMsOrderByUidGid, "" + user.getId() + "_" + goods.getId(), msOrder);
 
         return orderInfo;
     }

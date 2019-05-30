@@ -11,14 +11,14 @@ spring:
   datasource:     # driud
       url: jdbc:mysql://127.0.0.1:3306/miaosha?useUnicode=true&characterEncoding=utf-8
       username: root
-      password:
+      password: 
       driver-class-name: com.mysql.jdbc.Driver
       type: com.alibaba.druid.pool.DruidDataSource
       filters: stat   # 用于统计监控信息
-      maxActive: 2    # 最大活动连接
-      initialSize: 1  # 初始大小
+      maxActive: 1000    # 最大活动连接
+      initialSize: 100  # 初始大小
       maxWait: 60000    # 最大等待时间
-      minIdle: 1        # 最小空闲连接
+      minIdle: 500        # 最小空闲连接
       timeBetweenEvictionRunsMillis: 60000
       minEvictableIdleTimeMillis: 300000
       validationQuery: select 'x'
@@ -36,6 +36,27 @@ spring:
       gzipped: true
       html-application-cache: true
     static-locations: classpath:/static/
+  rabbitmq:      #rabbitMQ配置
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /       # 虚拟服务器
+    listener:
+      simple:
+        concurrency: 10   # 消费者数量
+        max-concurrency: 10   # 最大消费者数量
+        prefetch: 1       # 每次从连接的队列中取一个
+        auto-startup: true    # 默认启动消费者
+        default-requeue-rejected: true    # 开启后，消费失败的数据重新压入队列
+    template:
+      retry:
+        enabled: true   # 队列满了之后启用重试
+        initial-interval: 1000    # 启用间隔一秒
+        max-attempts: 3           # 最多重试三次
+        max-interval: 10000       # 最大间隔10秒
+        multiplier: 1.2           # 等待一次乘以系数1.2，下次则等待12秒，下下次14.4秒，以此类推
+
 
 ###################  mybatis配置  ###################
 mybatis:
@@ -46,12 +67,14 @@ mybatis:
     default-statement-timeout: 3000
   mapper-locations: classpath:com/glw/miaosha/dao/*.xml
 
+
 ###################  redis配置  ###################
 redis:
   host: 127.0.0.1
   port: 6379
-  timeout: 3
-  password:
-  poolMaxActive: 10
-  poolMaxIdle: 10
-  poolMaxWait: 3
+  timeout: 10
+  password: 
+  poolMaxTotal: 1000
+  poolMaxIdle: 500
+  poolMaxWait: 500
+

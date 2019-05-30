@@ -97,7 +97,7 @@ public class RedisService {
         try {
             jedis = jedisPool.getResource();
             String realKey = keyPrefix.getPrefix() + key;
-            long result = jedis.del(key);
+            long result = jedis.del(realKey);
             return result > 0;
         } finally {
             returnToPool(jedis);
@@ -140,7 +140,7 @@ public class RedisService {
         }
     }
 
-    private <T> String beanToString(T value) {
+    public static <T> String beanToString(T value) {
         if (value == null) {
             return null;
         }
@@ -156,7 +156,7 @@ public class RedisService {
         }
     }
 
-    private <T> T stringToBean(String str, Class<T> clazz) {
+    public static <T> T stringToBean(String str, Class<T> clazz) {
         if (str == null || str.length() <= 0 || clazz == null) {
             return null;
         }

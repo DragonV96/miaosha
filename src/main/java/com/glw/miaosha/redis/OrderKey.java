@@ -5,7 +5,10 @@ package com.glw.miaosha.redis;
  * 2019/5/1 16:44
  */
 public class OrderKey extends BasePrefix {
-    public OrderKey(int expireSeconds, String prefix) {
-        super(expireSeconds, prefix);
+
+    public OrderKey(String prefix) {    // 永不过期
+        super(prefix);
     }
+
+    public static OrderKey getMsOrderByUidGid = new OrderKey("moug");
 }
