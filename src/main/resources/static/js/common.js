@@ -15,7 +15,7 @@ function getQueryString(name) {
 	return null;
 }
 
-// 设定时间格式化函数， 使用new Date().format("yyyy-MM-dd hh:mm:ss")
+// 设定时间格式化函数， 使用new Date().format("yyyy-MM-dd HH:mm:ss")
 Date.prototype.format = function (format) {
 	var args = {
 		"M+" : this.getMonth() + 1,
@@ -30,6 +30,6 @@ Date.prototype.format = function (format) {
 		if (new RegExp("(" + i + ")").test(format)) {
 			format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
 		}
-		return format;
 	}
+    return format;
 }
