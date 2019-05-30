@@ -25,6 +25,10 @@ public class OrderService {
         return orderDao.getMsOrderByUserIdGoodsId(userId, goodsId);
     }
 
+    public OrderInfo getOrderById(long orderId) {
+        return orderDao.getOrderById(orderId);
+    }
+
     @Transactional
     public OrderInfo createOrder(MsUser user, GoodsVo goods) {
         OrderInfo orderInfo = new OrderInfo();
