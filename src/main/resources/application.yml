@@ -27,6 +27,15 @@ spring:
       testOnReturn: false
       poolPreparedStatements: true
       maxOpenPreparedStatements: 20
+  resources:    #资源配置
+    add-mappings: true
+    cache-period: 3600
+    chain:
+      cache: true
+      enabled: true
+      gzipped: true
+      html-application-cache: true
+    static-locations: classpath:/static/
 
 ###################  mybatis配置  ###################
 mybatis:
