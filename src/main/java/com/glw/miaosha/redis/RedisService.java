@@ -75,7 +75,7 @@ public class RedisService {
      * @param <T>
      * @return
      */
-    private <T> boolean exists(KeyPrefix keyPrefix, String key) {
+    public <T> boolean exists(KeyPrefix keyPrefix, String key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();

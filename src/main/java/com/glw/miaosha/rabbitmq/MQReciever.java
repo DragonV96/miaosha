@@ -1,8 +1,16 @@
 package com.glw.miaosha.rabbitmq;
 
+import com.glw.miaosha.doman.MsOrder;
+import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.redis.RedisService;
+import com.glw.miaosha.service.GoodsService;
+import com.glw.miaosha.service.MiaoshaService;
+import com.glw.miaosha.service.OrderService;
+import com.glw.miaosha.vo.GoodsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +22,44 @@ import org.springframework.stereotype.Service;
 public class MQReciever {
 
     private static Logger logger = LoggerFactory.getLogger(MQReciever.class);
+
+    @Autowired
+    public RedisService redisService;
+
+    @Autowired
+    GoodsService goodsService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    MiaoshaService miaoshaService;
+
+    @RabbitListener(queues = MQConfig.MIAOSHA_QUEUE)
+    public void receiveMiaoshaMessage (String message) {
+        logger.info("receive message：" + message);
+        MiaoshaMessage miaoshaMessage = RedisService.stringToBean(message, MiaoshaMessage.class);
+        MsUser user = miaoshaMessage.getMsUser();
+        long goodsId = miaoshaMessage.getGoodsId();
+
+        // 判断库存
+        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        Integer stockCount = goods.getStockCount();
+        if (stockCount <= 0) {
+            return;
+        }
+
+        // 判断是否已经秒杀到
+        MsOrder msOrder = orderService.getMsOrderByUserIdGoodsId(user.getId(), goodsId);
+        if (msOrder != null) {
+            return;
+        }
+        // 减库存->下订单->写入秒杀订单
+        miaoshaService.miaosha(user, goods);
+    }
+
+
+    //===================================== 练习demo =====================================
 
     @RabbitListener(queues = MQConfig.QUEUE)
     public void receive (String message) {

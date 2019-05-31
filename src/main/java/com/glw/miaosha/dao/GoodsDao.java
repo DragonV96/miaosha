@@ -23,5 +23,5 @@ public interface GoodsDao {
     public GoodsVo getGoodsVoByGoodsId(@Param("goodsId") long goodsId);
 
     @Update("update ms_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count > 0")
-    public void reduceStock(MsGoods goods);
+    public Integer reduceStock(MsGoods goods);
 }

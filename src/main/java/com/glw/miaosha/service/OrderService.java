@@ -51,7 +51,7 @@ public class OrderService {
 
         MsOrder msOrder = new MsOrder();
         msOrder.setGoodsId(goods.getId());
-        msOrder.setOrderId(orderId);
+        msOrder.setOrderId(orderInfo.getId());
         msOrder.setUserId(user.getId());
         orderDao.insertMsOrder(msOrder);
 
