@@ -1,12 +1,12 @@
 package com.glw.miaosha.service;
 
-import com.glw.miaosha.dao.GoodsDao;
-import com.glw.miaosha.doman.Goods;
 import com.glw.miaosha.doman.MsOrder;
 import com.glw.miaosha.doman.MsUser;
 import com.glw.miaosha.doman.OrderInfo;
 import com.glw.miaosha.redis.MiaoshaKey;
 import com.glw.miaosha.redis.RedisService;
+import com.glw.miaosha.util.MD5Util;
+import com.glw.miaosha.util.UUIDUtil;
 import com.glw.miaosha.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,4 +64,17 @@ public class MiaoshaService {
     }
 
 
+    public boolean checkPath(MsUser user, long goodsId, String path) {
+        if (user == null || path == null) {
+            return false;
+        }
+        String oldPath = redisService.get(MiaoshaKey.getMiaoshaPath, "" + user.getId() + "_" + goodsId, String.class);
+        return path.equals(oldPath);
+    }
+
+    public String createMiaoshaPath(MsUser user, long goodsId) {
+        String uuid = MD5Util.md5(UUIDUtil.uuid() + "miaosha");
+        redisService.set(MiaoshaKey.getMiaoshaPath, "" + user.getId() + "_" + goodsId, uuid);
+        return uuid;
+    }
 }

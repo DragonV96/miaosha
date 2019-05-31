@@ -47,7 +47,7 @@
         		<!--<button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>-->
         		<!--<input id="goodsId" type="hidden" name="goodsId" />-->
         	<!--</form>-->
-            <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doMiaosha()">立即秒杀</button>
+            <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="getMiaoshaPath()">立即秒杀</button>
             <input id="goodsId" type="hidden" name="goodsId" />
         </td>
      </tr>
@@ -67,6 +67,29 @@
 </div>
 </body>
 <script>
+    function getMiaoshaPath() {
+        goodsId = $('#goodsId').val()
+        g_showLoading();
+        $.ajax({
+            url: "/miaosha/path",
+            type: "GET",
+            data: {
+                goodsId: goodsId
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    var path = data.data;
+                    doMiaosha(path);
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function (e) {
+                layer.msg("客户端请求错误");
+            }
+        })
+    }
+
     function getMiaoshaResult(goodsId) {
         g_showLoading();
         $.ajax({
@@ -83,7 +106,7 @@
                     } else if (result == 0) {   // 继续轮询
                         setTimeout(function() {
                             getMiaoshaResult(goodsId);
-                        }, 50);
+                        }, 200);
                     } else {
                         layer.confirm("恭喜您！秒杀成功！查看订单", {btn:["确定", "取消"]},
                             function() {
@@ -104,9 +127,9 @@
         })
     }
 
-    function doMiaosha() {
+    function doMiaosha(path) {
         $.ajax({
-            url: "/miaosha/do_miaosha",
+            url: "/miaosha/" + path + "/do_miaosha",
             type: "POST",
             data: {
                 goodsId:  $('#goodsId').val()
