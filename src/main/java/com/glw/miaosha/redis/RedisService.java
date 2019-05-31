@@ -129,7 +129,7 @@ public class RedisService {
      * @param <T>
      * @return
      */
-    private <T> Long decr(KeyPrefix keyPrefix, String key) {
+    public <T> Long decr(KeyPrefix keyPrefix, String key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
