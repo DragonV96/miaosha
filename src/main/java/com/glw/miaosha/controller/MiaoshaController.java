@@ -13,15 +13,21 @@ import com.glw.miaosha.service.MiaoshaService;
 import com.glw.miaosha.service.MsUserService;
 import com.glw.miaosha.service.OrderService;
 import com.glw.miaosha.vo.GoodsVo;
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -145,12 +151,40 @@ public class MiaoshaController implements InitializingBean {
 
     @RequestMapping(value = "/path", method = RequestMethod.GET)
     @ResponseBody
-    public Result<String> getMiaoshaPath(Model model, MsUser user, @RequestParam("goodsId") long goodsId) {
+    public Result<String> getMiaoshaPath(Model model, MsUser user, @RequestParam("goodsId") long goodsId,
+                                         @RequestParam("verifyCode") int verifyCode) {
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
+        //
+        boolean check = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
+        if (!check) {
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
         String path = miaoshaService.createMiaoshaPath(user, goodsId);
         return Result.success(path);
+    }
+
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoshaVerifyCode(HttpServletResponse response, Model model, MsUser user, @RequestParam("goodsId") long goodsId) {
+        model.addAttribute("user", user);
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        BufferedImage image = miaoshaService.createVerifyCode(user, goodsId);
+
+        try {
+            OutputStream out = response.getOutputStream();
+            ImageIO.write(image, "JPEG", out);
+            out.flush();
+            out.close();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(CodeMsg.MIAO_SHA_FAIL);
+        }
+
     }
 }
