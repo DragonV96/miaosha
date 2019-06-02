@@ -4,6 +4,7 @@ import com.glw.miaosha.doman.MsOrder;
 import com.glw.miaosha.doman.MsUser;
 import com.glw.miaosha.rabbitmq.MQSender;
 import com.glw.miaosha.rabbitmq.MiaoshaMessage;
+import com.glw.miaosha.redis.AccessKey;
 import com.glw.miaosha.redis.GoodsKey;
 import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.result.CodeMsg;
@@ -13,7 +14,6 @@ import com.glw.miaosha.service.MiaoshaService;
 import com.glw.miaosha.service.MsUserService;
 import com.glw.miaosha.service.OrderService;
 import com.glw.miaosha.vo.GoodsVo;
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +21,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 
 /**
@@ -151,13 +151,23 @@ public class MiaoshaController implements InitializingBean {
 
     @RequestMapping(value = "/path", method = RequestMethod.GET)
     @ResponseBody
-    public Result<String> getMiaoshaPath(Model model, MsUser user, @RequestParam("goodsId") long goodsId,
-                                         @RequestParam("verifyCode") int verifyCode) {
-        model.addAttribute("user", user);
+    public Result<String> getMiaoshaPath(HttpServletRequest request, MsUser user, @RequestParam("goodsId") long goodsId,
+                                         @RequestParam(value = "verifyCode", defaultValue = "0") int verifyCode) {
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-        //
+        // 查询访问的次数
+        String uri = request.getRequestURI();
+        String key = uri + "_" + user.getId();
+        Integer count = redisService.get(AccessKey.access, key, Integer.class);
+        if (count == null) {
+            redisService.set(AccessKey.access, key, 1);
+        } else if (count < 5) {
+            redisService.incr(AccessKey.access, key);
+        } else {
+            return Result.error(CodeMsg.ACCESS_LIMIT_REACHED);
+        }
+
         boolean check = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
         if (!check) {
             return Result.error(CodeMsg.REQUEST_ILLEGAL);
