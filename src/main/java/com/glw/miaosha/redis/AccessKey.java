@@ -1,6 +1,7 @@
 package com.glw.miaosha.redis;
 
 /**
+ * 权限键类
  * @author glw
  * @date 2019/5/31 15:16
  */
@@ -10,5 +11,7 @@ public class AccessKey extends BasePrefix{
         super(expireSeconds, prefix);
     }
 
-    public static AccessKey access = new AccessKey(5, "access");
+    public static AccessKey updateKey(int expireSeconds) {
+        return new AccessKey(expireSeconds, "access");
+    }
 }
