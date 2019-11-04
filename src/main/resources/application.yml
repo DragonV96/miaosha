@@ -1,3 +1,8 @@
+###################  ip配置  ###################
+host:
+  local: 127.0.0.1
+  private: 192.168.241.130
+
 ###################  srping配置  ###################
 spring:
   thymeleaf:      # thymeleaf
@@ -9,24 +14,24 @@ spring:
     encoding: UTF-8
     mode: HTML5
   datasource:     # driud
-      url: jdbc:mysql://127.0.0.1:3306/miaosha?useUnicode=true&characterEncoding=utf-8
-      username: root
-      password: 
-      driver-class-name: com.mysql.jdbc.Driver
-      type: com.alibaba.druid.pool.DruidDataSource
-      filters: stat   # 用于统计监控信息
-      maxActive: 1000    # 最大活动连接
-      initialSize: 100  # 初始大小
-      maxWait: 60000    # 最大等待时间
-      minIdle: 500        # 最小空闲连接
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 300000
-      validationQuery: select 'x'
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-      poolPreparedStatements: true
-      maxOpenPreparedStatements: 20
+    url: jdbc:mysql://${host.private}:3306/miaosha?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat   # 用于统计监控信息
+    maxActive: 1000    # 最大活动连接
+    initialSize: 100  # 初始大小
+    maxWait: 60000    # 最大等待时间
+    minIdle: 500        # 最小空闲连接
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
   resources:    #资源配置
     add-mappings: true
     cache-period: 3600
@@ -37,11 +42,11 @@ spring:
       html-application-cache: true
     static-locations: classpath:/static/
   rabbitmq:      #rabbitMQ配置
-    host: 127.0.0.1
+    host: ${host.private}
     port: 5672
     username: guest
     password: guest
-    virtual-host: /       # 虚拟服务器
+    virtual-host: /       # 虚拟主机
     listener:
       simple:
         concurrency: 10   # 消费者数量
@@ -58,6 +63,14 @@ spring:
         multiplier: 1.2           # 等待一次乘以系数1.2，下次则等待12秒，下下次14.4秒，以此类推
 
 
+###################  日志输出配置  ###################
+logging:
+  path: /data/log
+  file: ${logging.path}/miaosha.log
+  config: classpath:logback-spring.xml
+  level:
+    com.glw.miaosha: info
+
 ###################  mybatis配置  ###################
 mybatis:
   type-aliases-package: com.glw.miaosha.domain
@@ -70,7 +83,7 @@ mybatis:
 
 ###################  redis配置  ###################
 redis:
-  host: 127.0.0.1
+  host: ${host.private}
   port: 6379
   timeout: 10
   password: 
