@@ -1,6 +1,6 @@
 package com.glw.miaosha.dao;
 
-import com.glw.miaosha.doman.User;
+import com.glw.miaosha.dao.doman.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

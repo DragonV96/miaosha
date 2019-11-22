@@ -1,11 +1,11 @@
 package com.glw.miaosha.service;
 
 import com.glw.miaosha.dao.MsUserDao;
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsUser;
 import com.glw.miaosha.exception.GlobalException;
 import com.glw.miaosha.redis.MsUserKey;
 import com.glw.miaosha.redis.RedisService;
-import com.glw.miaosha.result.CodeMsg;
+import com.glw.miaosha.exception.result.CodeMsg;
 import com.glw.miaosha.util.MD5Util;
 import com.glw.miaosha.util.UUIDUtil;
 import com.glw.miaosha.vo.LoginVo;

@@ -1,8 +1,8 @@
 package com.glw.miaosha.service;
 
-import com.glw.miaosha.doman.MsOrder;
-import com.glw.miaosha.doman.MsUser;
-import com.glw.miaosha.doman.OrderInfo;
+import com.glw.miaosha.dao.doman.MsOrder;
+import com.glw.miaosha.dao.doman.MsUser;
+import com.glw.miaosha.dao.doman.OrderInfo;
 import com.glw.miaosha.redis.MiaoshaKey;
 import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.util.MD5Util;

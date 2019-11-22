@@ -1,6 +1,6 @@
 package com.glw.miaosha.rabbitmq;
 
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsUser;
 
 /**
  * @author glw

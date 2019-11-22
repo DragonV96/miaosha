@@ -1,6 +1,6 @@
 package com.glw.miaosha.access;
 
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsUser;
 
 /**
  * 管理用户

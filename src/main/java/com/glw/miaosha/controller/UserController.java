@@ -1,14 +1,13 @@
 package com.glw.miaosha.controller;
 
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsUser;
 import com.glw.miaosha.redis.RedisService;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.Result;
 import com.glw.miaosha.service.GoodsService;
 import com.glw.miaosha.service.MsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

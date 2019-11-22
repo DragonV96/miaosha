@@ -1,6 +1,6 @@
 package com.glw.miaosha.exception;
 
-import com.glw.miaosha.result.CodeMsg;
+import com.glw.miaosha.exception.result.CodeMsg;
 
 /**
  * Create by glw

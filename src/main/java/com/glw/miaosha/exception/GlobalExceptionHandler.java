@@ -1,7 +1,7 @@
 package com.glw.miaosha.exception;
 
-import com.glw.miaosha.result.CodeMsg;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.CodeMsg;
+import com.glw.miaosha.exception.result.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;

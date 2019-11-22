@@ -1,10 +1,10 @@
 package com.glw.miaosha.controller;
 
-import com.glw.miaosha.doman.MsUser;
-import com.glw.miaosha.doman.OrderInfo;
+import com.glw.miaosha.dao.doman.MsUser;
+import com.glw.miaosha.dao.doman.OrderInfo;
 import com.glw.miaosha.redis.RedisService;
-import com.glw.miaosha.result.CodeMsg;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.CodeMsg;
+import com.glw.miaosha.exception.result.Result;
 import com.glw.miaosha.service.GoodsService;
 import com.glw.miaosha.service.MsUserService;
 import com.glw.miaosha.service.OrderService;

@@ -1,11 +1,11 @@
 package com.glw.miaosha.controller;
 
-import com.glw.miaosha.doman.User;
+import com.glw.miaosha.dao.doman.User;
 import com.glw.miaosha.rabbitmq.MQSender;
 import com.glw.miaosha.redis.RedisService;
 import com.glw.miaosha.redis.UserKey;
-import com.glw.miaosha.result.CodeMsg;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.CodeMsg;
+import com.glw.miaosha.exception.result.Result;
 import com.glw.miaosha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

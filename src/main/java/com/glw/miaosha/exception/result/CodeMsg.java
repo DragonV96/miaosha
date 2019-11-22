@@ -1,4 +1,4 @@
-package com.glw.miaosha.result;
+package com.glw.miaosha.exception.result;
 
 /**
  * @author glw

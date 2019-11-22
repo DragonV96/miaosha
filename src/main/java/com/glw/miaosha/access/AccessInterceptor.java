@@ -1,11 +1,11 @@
 package com.glw.miaosha.access;
 
 import com.alibaba.fastjson.JSON;
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsUser;
 import com.glw.miaosha.redis.AccessKey;
 import com.glw.miaosha.redis.RedisService;
-import com.glw.miaosha.result.CodeMsg;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.CodeMsg;
+import com.glw.miaosha.exception.result.Result;
 import com.glw.miaosha.service.MsUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

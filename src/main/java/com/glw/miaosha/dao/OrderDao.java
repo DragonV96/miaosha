@@ -1,7 +1,7 @@
 package com.glw.miaosha.dao;
 
-import com.glw.miaosha.doman.MsOrder;
-import com.glw.miaosha.doman.OrderInfo;
+import com.glw.miaosha.dao.doman.MsOrder;
+import com.glw.miaosha.dao.doman.OrderInfo;
 import org.apache.ibatis.annotations.*;
 
 /**

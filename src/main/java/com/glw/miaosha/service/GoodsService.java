@@ -1,7 +1,7 @@
 package com.glw.miaosha.service;
 
 import com.glw.miaosha.dao.GoodsDao;
-import com.glw.miaosha.doman.MsGoods;
+import com.glw.miaosha.dao.doman.MsGoods;
 import com.glw.miaosha.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

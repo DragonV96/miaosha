@@ -1,15 +1,14 @@
 package com.glw.miaosha.controller;
 
 import com.glw.miaosha.access.AccessLimit;
-import com.glw.miaosha.doman.MsOrder;
-import com.glw.miaosha.doman.MsUser;
+import com.glw.miaosha.dao.doman.MsOrder;
+import com.glw.miaosha.dao.doman.MsUser;
 import com.glw.miaosha.rabbitmq.MQSender;
 import com.glw.miaosha.rabbitmq.MiaoshaMessage;
-import com.glw.miaosha.redis.AccessKey;
 import com.glw.miaosha.redis.GoodsKey;
 import com.glw.miaosha.redis.RedisService;
-import com.glw.miaosha.result.CodeMsg;
-import com.glw.miaosha.result.Result;
+import com.glw.miaosha.exception.result.CodeMsg;
+import com.glw.miaosha.exception.result.Result;
 import com.glw.miaosha.service.GoodsService;
 import com.glw.miaosha.service.MiaoshaService;
 import com.glw.miaosha.service.MsUserService;

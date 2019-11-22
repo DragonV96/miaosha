@@ -1,7 +1,7 @@
 package com.glw.miaosha.service;
 
 import com.glw.miaosha.dao.UserDao;
-import com.glw.miaosha.doman.User;
+import com.glw.miaosha.dao.doman.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
