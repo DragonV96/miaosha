@@ -24,7 +24,7 @@ public class IsMobileValidator implements ConstraintValidator<IsMobile, String>{
             return ValidatorUtil.isMobile(s);
         } else {
             if (StringUtils.isEmpty(s)) {
-                return true;
+                return false;
             } else {
                 return ValidatorUtil.isMobile(s);
             }
