@@ -50,7 +50,7 @@ echo "===============创建mysql容器并启动...==============="
 docker run --name mysql --net=host --restart=always -v /usr/local/mysql/conf:/etc/mysql/conf.d -v /usr/local/mysql/data:/var/lib/mysql -v /usr/local/mysql/log:/log -e MYSQL_ROOT_PASSWORD=root --privileged=true -d mysql:5.7.26 --lower_case_table_names=1
 
 echo "===============创建redis容器并启动...==============="
-docker run --name redis --net=host --restart=always -v /usr/local/redis/conf/redis.conf:/etc/redis/redis.conf -v /usr/local/redis/data:/data --privileged=true -d redis:latest
+docker run --name redis --net=host --restart=always -v /usr/local/redis/conf/redis.conf:/etc/redis.conf -v /usr/local/redis/data:/data --privileged=true -d redis:latest /usr/local/bin/redis-server /etc/redis.conf --appendonly yes --requirepass root123
 
 echo "===============创建rabbitmq容器并启动...==============="
 docker run --name rabbitmq --net=host --restart=always -v /usr/local/rabbitmq/log:/var/log/rabbitmq -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest -e RABBITMQ_DEFAULT_VHOST=/ -d rabbitmq:3.7.7-management
