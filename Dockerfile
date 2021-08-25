@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-slim
 MAINTAINER glw
 
 # 设置环境变量
-ENV JAVA_OPTIONS -Xmx768m
+ENV JAVA_OPTIONS -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./miaosha_dump.hprof
 
 # 复制文件
 ADD ./*.jar /data/apps/miaosha.jar
